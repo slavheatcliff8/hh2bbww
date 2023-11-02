@@ -16,7 +16,9 @@ from hbw.production.prepare_objects import prepare_objects
 from hbw.config.categories import add_categories_production
 from hbw.config.variables import add_feature_variables
 from hbw.config.dl.variables import add_dl_variables
+from hbw.config.sl_res.variables import add_sl_res_variables
 from hbw.util import four_vec
+from hbw.production.resonant_features import resonant_features
 
 np = maybe_import("numpy")
 ak = maybe_import("awkward")
@@ -82,6 +84,8 @@ def bb_features(self: Producer, events: ak.Array, **kwargs) -> ak.Array:
         "Jet.pt", "Jet.eta", "Jet.btagDeepFlavB",
         "Bjet.btagDeepFlavB", "Bjet.pt",
         "FatJet.pt", "FatJet.tau1", "FatJet.tau2",
+        "Lepton.pt","Lepton.mass","Lepton.eta","Lepton.phi",
+        "MET.pt","MET.mass","MET.phi", "MET.phi",
     },
     produces={
         bb_features, jj_features,
@@ -129,6 +133,7 @@ def features(self: Producer, events: ak.Array, **kwargs) -> ak.Array:
     # undo object padding (remove None entries)
     for obj in ["Jet", "Bjet", "FatJet"]:
         events = set_ak_column(events, obj, events[obj][~ak.is_none(events[obj], axis=1)])
+
 
     return events
 
@@ -202,3 +207,32 @@ def dl_features(self: Producer, events: ak.Array, **kwargs) -> ak.Array:
 def dl_features_init(self: Producer) -> None:
     # add variable instances to config
     add_dl_variables(self.config_inst)
+
+
+@producer(
+    uses=four_vec({"Electron", "Muon", "Bjet", "MET"}) | {
+        features,
+    },
+    produces={
+        features,
+        "eta_Whadron","eta_Wlepton","eta_Higgs_WW","eta_Higgs_bb","eta_Higgs_bb",
+        "phi_Whadron","phi_Wlepton","phi_Higgs_WW","phi_Higgs_bb","phi_Heavy_Higgs",
+        "Whadron","Wlepton","Higgs_WW","Higgs_bb","Heavy_Higgs",
+        "pt_Whadron","pt_Wlepton","pt_Higgs_WW","pt_Higgs_bb","pt_Heavy_Higgs",
+        "m_Whadron","m_Wlepton","m_Higgs_WW","m_Higgs_bb","m_Heavy_Higgs", 
+    },
+)
+def sl_res_features(self: Producer, events: ak.Array, **kwargs) -> ak.Array:
+
+    # Inherit common features and prepares Object Lepton. Bjet, etc.
+    events = self[features](events, **kwargs)
+    events = self[resonant_features](events, **kwargs)
+    
+
+    return events
+
+
+@sl_res_features.init
+def sl_res_features_init(self: Producer) -> None:
+    # add variable instances to config
+    add_sl_res_variables(self.config_inst)

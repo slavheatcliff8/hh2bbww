@@ -97,6 +97,10 @@ def ml_inputs(self: Producer, events: ak.Array, **kwargs) -> ak.Array:
 
     hbb = events.Bjet[:, 0] + events.Bjet[:, 1]
     events = set_ak_column_f32(events, "mli_mbb", hbb.mass)
+    events = set_ak_column_f32(events, "mli_pt_bb", hbb.pt)
+    events = set_ak_column_f32(events, "mli_eta_bb", hbb.eta)
+    events = set_ak_column_f32(events, "mli_phi_bb", hbb.phi)
+
 
     mindr_lb = ak.min(events.Bjet.delta_r(events.Lepton[:, 0]), axis=-1)
     events = set_ak_column_f32(events, "mli_mindr_lb", mindr_lb)
@@ -107,6 +111,9 @@ def ml_inputs(self: Producer, events: ak.Array, **kwargs) -> ak.Array:
 
     wjj = events.Lightjet[:, 0] + events.Lightjet[:, 1]
     events = set_ak_column_f32(events, "mli_mjj", wjj.mass)
+    events = set_ak_column_f32(events, "mli_pt_jj", wjj.pt)
+    events = set_ak_column_f32(events, "mli_eta_jj", wjj.eta)
+    events = set_ak_column_f32(events, "mli_phi_jj", wjj.phi)
 
     mindr_lj = ak.min(events.Lightjet.delta_r(events.Lepton[:, 0]), axis=-1)
     events = set_ak_column_f32(events, "mli_mindr_lj", mindr_lj)
@@ -116,13 +123,22 @@ def ml_inputs(self: Producer, events: ak.Array, **kwargs) -> ak.Array:
     events = set_ak_column_f32(events, "mli_dphi_lnu", abs(events.Lepton[:, 0].delta_phi(events.MET)))
     # NOTE: this column can be set to nan value
     events = set_ak_column_f32(events, "mli_mlnu", wlnu.mass)
+    events = set_ak_column_f32(events, "mli_pt_lnu", wlnu.pt)
+    events = set_ak_column_f32(events, "mli_pt_eta", wlnu.eta)
+    events = set_ak_column_f32(events, "mli_phi_lnu", wlnu.phi)
 
     # hww features
     hww = wlnu + wjj
     hww_vis = events.Lepton[:, 0] + wjj
 
     events = set_ak_column_f32(events, "mli_mjjlnu", hww.mass)
+    events = set_ak_column_f32(events, "mli_pt_jjlnu", hww.pt)
+    events = set_ak_column_f32(events, "mli_phi_jjlnu", hww.phi)
+    events = set_ak_column_f32(events, "mli_eta_jjlnu", hww.eta)
     events = set_ak_column_f32(events, "mli_mjjl", hww_vis.mass)
+    events = set_ak_column_f32(events, "mli_pt_jjl", hww_vis.pt)
+    events = set_ak_column_f32(events, "mli_eta_jjl", hww_vis.eta)
+    events = set_ak_column_f32(events, "mli_phi_jjl", hww_vis.phi)
 
     # angles
     events = set_ak_column_f32(events, "mli_dphi_bb_jjlnu", abs(hbb.delta_phi(hww)))

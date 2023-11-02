@@ -25,39 +25,37 @@ logger = law.logger.get_logger(__name__)
 class DenseClassifier(ModelFitMixin, DenseModelMixin, MLClassifierBase):
 
     processes = [
-        "ggHH_kl_1_kt_1_sl_hbbhww",
-        "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww",
+#    "ggHH_kl_1_kt_1_sl_hbbhww",
+        "graviton_hh_ggf_bbww_m250",
         "tt",
         "st",
-        "v_lep",
-        # "w_lnu",
-        # "dy_lep",
+        "w_lnu",
+        "dy_lep",
     ]
 
     ml_process_weights = {
-        "ggHH_kl_1_kt_1_sl_hbbhww": 1,
-        "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww": 1,
+ #       "ggHH_kl_1_kt_1_sl_hbbhww": 1,
+        "graviton_hh_ggf_bbww_m250": 1,
         "tt": 2,
         "st": 2,
-        "v_lep": 2,
         "w_lnu": 2,
         "dy_lep": 2,
-    }
+    } 
 
     dataset_names = {
-        "ggHH_kl_1_kt_1_sl_hbbhww_powheg",
-        "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww_madgraph",
+     #   "ggHH_kl_1_kt_1_sl_hbbhww_powheg",
+        "graviton_hh_ggf_bbww_m250_madgraph",
         # TTbar
         "tt_sl_powheg",
         "tt_dl_powheg",
         "tt_fh_powheg",
         # SingleTop
         "st_tchannel_t_powheg",
-        "st_tchannel_tbar_powheg",
+        #"st_tchannel_tbar_powheg",
         "st_twchannel_t_powheg",
-        "st_twchannel_tbar_powheg",
+        "st_twchannel_tbar_powheg", 
         "st_schannel_lep_amcatnlo",
-        # "st_schannel_had_amcatnlo",
+       # "st_schannel_had_amcatnlo",
         # WJets
         "w_lnu_ht70To100_madgraph",
         "w_lnu_ht100To200_madgraph",
@@ -79,13 +77,22 @@ class DenseClassifier(ModelFitMixin, DenseModelMixin, MLClassifierBase):
     }
 
     input_features = [
+        # "ht",
+        # "m_bb",
+        # "deltaR_bb",
         "mli_ht", "mli_n_jet", "mli_n_deepjet",
         # "mli_deepjetsum", "mli_b_deepjetsum", "mli_l_deepjetsum",
-        "mli_dr_bb", "mli_dphi_bb", "mli_mbb", "mli_mindr_lb",
-        "mli_dr_jj", "mli_dphi_jj", "mli_mjj", "mli_mindr_lj",
+        "mli_dr_bb", "mli_dphi_bb", "mli_mbb", "mli_mindr_lb", "mli_dr_jj", "mli_dphi_jj", "mli_mjj", "mli_mindr_lj",
         "mli_dphi_lnu", "mli_mlnu", "mli_mjjlnu", "mli_mjjl", "mli_dphi_bb_jjlnu", "mli_dr_bb_jjlnu",
         "mli_dphi_bb_jjl", "mli_dr_bb_jjl", "mli_dphi_bb_nu", "mli_dphi_jj_nu", "mli_dr_bb_l", "mli_dr_jj_l",
         "mli_mbbjjlnu", "mli_mbbjjl", "mli_s_min",
+        #"mli_pt_jj","mli_eta_jj","mli_phi_jj",
+        #"mli_pt_lnu","mli_eta_lnu","mli_phi_lnu",
+        #!"mli_pt_jjlnu","mli_eta_jjlnu","mli_phi_jjlnu",
+       #! "mli_pt_jjl","mli_eta_jjl","mli_phi_jjl",
+       # "mli_pt_bbjjlnu","mli_eta_bbjjlnu","mli_phi_bbjjlnu",
+       # "mli_pt_bbjjl","mli_eta_bbjjl","mli_phi_bbjjl",
+       #! "mli_pt_bb","mli_eta_bb","mli_phi_bb",
     ] + [
         f"mli_{obj}_{var}"
         for obj in ["b1", "b2", "j1", "j2", "lep", "met"]
@@ -94,19 +101,19 @@ class DenseClassifier(ModelFitMixin, DenseModelMixin, MLClassifierBase):
         f"mli_{obj}_{var}"
         for obj in ["fj"]
         for var in ["pt", "eta", "phi", "mass", "msoftdrop", "deepTagMD_HbbvsQCD"]
-    ]
+    ] 
 
     store_name = "inputs_v1"
 
-    folds = 5
+    folds = 2
     validation_fraction = 0.20
     learningrate = 0.00050
     negative_weights = "handle"
 
     # overwriting DenseModelMixin parameters
     activation = "relu"
-    layers = (512, 512, 512)
-    dropout = 0.20
+    layers = (100, 200, 100)
+    dropout = 0.50
 
     # overwriting ModelFitMixin parameters
     callbacks = {
@@ -117,7 +124,7 @@ class DenseClassifier(ModelFitMixin, DenseModelMixin, MLClassifierBase):
     reduce_lr_factor = 0.8
     reduce_lr_patience = 3
     epochs = 100
-    batchsize = 2 ** 12
+    batchsize = 8000
 
     # parameters to add into the `parameters` attribute and store in a yaml file
     bookkeep_params = [
@@ -175,7 +182,7 @@ class DenseClassifier(ModelFitMixin, DenseModelMixin, MLClassifierBase):
             return list(requested_configs)
         else:
             # use config_2017 per default
-            return ["c17"]
+            return ["l17"]
 
     def training_calibrators(self, config_inst: od.Config, requested_calibrators: Sequence[str]) -> list[str]:
         # fix MLTraining Phase Space
@@ -183,7 +190,15 @@ class DenseClassifier(ModelFitMixin, DenseModelMixin, MLClassifierBase):
 
     def training_selector(self, config_inst: od.Config, requested_selector: str) -> str:
         # fix MLTraining Phase Space
-        return "sl" if self.config_inst.has_tag("is_sl") else "dl"
+        selector = "sl"
+        if self.config_inst.has_tag("is_sl" or "is_res"):
+            selector = "sl" 
+        #if self.config_inst.has_tag("is_res"):
+       #     selector = "sl_res" 
+        if self.config_inst.has_tag("is_dl"):
+            selector = "dl" 
+
+        return selector
 
     def training_producers(self, config_inst: od.Config, requested_producers: Sequence[str]) -> list[str]:
         # fix MLTraining Phase Space

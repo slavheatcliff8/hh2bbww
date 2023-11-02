@@ -64,6 +64,9 @@ ml_labels = {
     "w_lnu": "W",
     "dy_lep": "DY",
     "v_lep": "W+DY",
+    "graviton_hh_ggf_bbww_m250_madgraph": "grav250",
+    "graviton_hh_ggf_bbww_m600_madgraph": "grav600",
+    "graviton_hh_ggf_bbww_m1000_madgraph": "grav1000",
 }
 
 

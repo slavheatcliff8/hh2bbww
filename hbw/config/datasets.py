@@ -42,7 +42,7 @@ def add_hbw_datasets(config: od.Config, campaign: od.Campaign):
         "tt_fh_powheg",
         # SingleTop
         "st_tchannel_t_powheg",
-        "st_tchannel_tbar_powheg",
+       # "st_tchannel_tbar_powheg",
         "st_twchannel_t_powheg",
         "st_twchannel_tbar_powheg",
         "st_schannel_lep_amcatnlo",
@@ -126,13 +126,13 @@ def add_hbw_datasets(config: od.Config, campaign: od.Campaign):
             "qqHH_CV_0p5_C2V_1_kl_1_dl_hbbhww_madgraph",
             "qqHH_CV_1p5_C2V_1_kl_1_dl_hbbhww_madgraph",
         ]
-    if config.has_tag("is_sl") and config.has_tag("is_resonant"):
+    if config.has_tag("is_sl") and config.has_tag("is_res"):
         for mass in config.x.graviton_masspoints:
             dataset_names.append(f"graviton_hh_ggf_bbww_m{mass}_madgraph")
         for mass in config.x.radion_masspoints:
             dataset_names.append(f"radion_hh_ggf_bbww_m{mass}_madgraph")
 
-    if config.has_tag("is_dl") and config.has_tag("is_resonant"):
+    if config.has_tag("is_dl") and config.has_tag("is_res"):
         logger.warning(
             f"For analysis {config.analysis.name}: dileptonic resonant samples still needs to be implemented",
         )

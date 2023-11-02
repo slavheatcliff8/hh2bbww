@@ -6,23 +6,23 @@ Collection of configurations that stay constant for the analysis
 
 # collection of all signal processes
 signals_ggHH = {
-    "ggHH_kl_0_kt_1_sl_hbbhww", "ggHH_kl_1_kt_1_sl_hbbhww",
-    "ggHH_kl_2p45_kt_1_sl_hbbhww", "ggHH_kl_5_kt_1_sl_hbbhww",
+    "graviton_hh_ggf_bbww_m250_madgraph",
 }
-signals_qqHH = {
-    "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "qqHH_CV_1_C2V_1_kl_0_sl_hbbhww", "qqHH_CV_1_C2V_1_kl_2_sl_hbbhww",
-    "qqHH_CV_1_C2V_0_kl_1_sl_hbbhww", "qqHH_CV_1_C2V_2_kl_1_sl_hbbhww",
-    "qqHH_CV_0p5_C2V_1_kl_1_sl_hbbhww", "qqHH_CV_1p5_C2V_1_kl_1_sl_hbbhww",
-}
-signals = {*signals_ggHH, *signals_qqHH}
+# signals_qqHH = {
+#     "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "qqHH_CV_1_C2V_1_kl_0_sl_hbbhww", "qqHH_CV_1_C2V_1_kl_2_sl_hbbhww",
+#     "qqHH_CV_1_C2V_0_kl_1_sl_hbbhww", "qqHH_CV_1_C2V_2_kl_1_sl_hbbhww",
+#     "qqHH_CV_0p5_C2V_1_kl_1_sl_hbbhww", "qqHH_CV_1p5_C2V_1_kl_1_sl_hbbhww",
+# }
+#signals = {*signals_ggHH, *signals_qqHH}
+signals = {*signals_ggHH}
 
 # mapping between lepton categories and datasets (only 2017 ATM)
 data_datasets = {
     "1e": {f"data_e_{i}" for i in ["b", "c", "d", "e", "f"]},
     "1mu": {f"data_mu_{i}" for i in ["b", "c", "d", "e", "f"]},
-    "2e": {"data_e_b"},  # TODO: 2 lep datasets in cmsdb + config
-    "2mu": {"data_mu_b"},  # TODO
-    "emu": {"data_mu_b"},  # TODO
+    # "2e": {"data_e_b"},  # TODO: 2 lep datasets in cmsdb + config
+    # "2mu": {"data_mu_b"},  # TODO
+    # "emu": {"data_mu_b"},  # TODO
 }
 merged_datasets = set().union(*data_datasets.values())
 
@@ -45,8 +45,8 @@ processes_per_QCDScale = {
     "VH": ["ZH", "WH", "VH"],
     "ttH": ["ttH", "tHq", "tHW"],
     "bbH": ["bbH"],  # contains also pdf and alpha_s
-    # "ggHH": signals_ggHH,  # included in inference model (THU_HH)
-    "qqHH": signals_qqHH,
+    "ggHH": signals_ggHH,  # included in inference model (THU_HH)
+   # "qqHH": signals_qqHH,
     "VHH": [],
     "ttHH": [],
 }
@@ -62,7 +62,7 @@ processes_per_pdf_rate = {
     "Higgs_ttH": ["ttH", "tHq", "tHW"],
     # "Higgs_bbh": ["bbH"],  # removed
     "Higgs_ggHH": signals_ggHH,
-    "Higgs_qqHH": signals_qqHH,
+    #"Higgs_qqHH": signals_qqHH,
     "Higgs_VHH": ["HHZ", "HHW+", "HHW-"],
     "Higgs_ttHH": ["ttHH"],
 }

@@ -220,6 +220,91 @@ def add_ml_variables(config: od.Config) -> None:
         binning=(2, -0.5, 1.5),
         x_title="existence of at least two vbf jets = 1, else 0",
     )
+    #W_jj features 
+    config.add_variable(
+        name=f"mli_pt_jj",
+        expression=f"mli_pt_jj",
+        binning=(40, 0., 400.),
+        unit="GeV",
+        x_title=r"$W_{hadron}$ $p_{T}$",
+    )
+    config.add_variable(
+        name=f"mli_eta_jj",
+        expression=f"mli_eta_jj",
+        binning=(50, -2.5, 2.5),
+        x_title=r"$W_{hadron}$ $\eta$",
+    )
+    config.add_variable(
+        name=f"mli_phi_jj",
+        expression=f"mli_phi_jj",
+        binning=(40, -3.2, 3.2),
+        x_title=r"$W_{hadron}$ $\phi$ ",
+    )
+   #W_lnu features 
+    config.add_variable(
+        name=f"mli_pt_lnu",
+        expression=f"mli_pt_lnu",
+        binning=(40, 0., 400.),
+        unit="GeV",
+        x_title=r"$W_{lepton}$ $p_{T}$",
+    )
+    config.add_variable(
+        name=f"mli_eta_lnu",
+        expression=f"mli_eta_lnu",
+        binning=(50, -2.5, 2.5),
+        x_title=r"$W_{lepton}$ $\eta$",
+    )
+    config.add_variable(
+        name=f"mli_phi_lnu",
+        expression=f"mli_phi_lnu",
+        binning=(40, -3.2, 3.2),
+        x_title=r"$W_{lepton}$ $\phi$ ",
+    )
+    #H_WW (all)  features 
+    config.add_variable(
+        name=f"mli_pt_jjlnu",
+        expression=f"mli_pt_jjlnu",
+        binning=(40, 0., 400.),
+        unit="GeV",
+        x_title=r"$H_{WW}$ $p_{T}$",
+    )
+    config.add_variable(
+        name=f"mli_eta_jjlnu",
+        expression=f"mli_eta_jjlnu",
+       
+        binning=(50, -2.5, 2.5),
+        x_title=r"H_{WW}$ $\eta$",
+    )
+    config.add_variable(
+        name=f"mli_phi_jjlnu",
+        expression=f"mli_phi_jjlnu",
+       
+        binning=(40, -3.2, 3.2),
+        x_title=r"$H_{WW}$ $\phi$ ",
+    )
+    #H_bbfeatures 
+    config.add_variable(
+        name=f"mli_pt_bb",
+        expression=f"mli_pt_bb",
+       
+        binning=(40, 0., 400.),
+        unit="GeV",
+        x_title=r"$H_{bb}$ $p_{T}$",
+    )
+    config.add_variable(
+        name=f"mli_eta_bb",
+        expression=f"mli_eta_bb",
+       
+        binning=(50, -2.5, 2.5),
+        x_title=r"H_{bb}$ $\eta$",
+    )
+    config.add_variable(
+        name=f"mli_phi_bb",
+        expression=f"mli_phi_bb",
+       
+        binning=(40, -3.2, 3.2),
+        x_title=r"$H_{bb}$ $\phi$ ",
+    )   
 
     for obj in ["b1", "b2", "j1", "j2", "lep", "met"]:
         for var in ["pt", "eta"]:

@@ -49,7 +49,7 @@ def add_config(
 
     # create a config by passing the campaign, so id and name will be identical
     cfg = analysis.add_config(campaign, name=config_name, id=config_id, tags=analysis.tags)
-    if cfg.has_tag("is_sl"):
+    if cfg.has_tag("is_sl" or "is_res"):
         cfg.x.lepton_tag = "sl"
     elif cfg.has_tag("is_dl"):
         cfg.x.lepton_tag = "dl"
@@ -57,7 +57,7 @@ def add_config(
         raise Exception(f"config {cfg.name} needs either the 'is_sl' or 'is_dl' tag")
 
     # define all resonant masspoints
-    if cfg.has_tag("is_resonant"):
+    if cfg.has_tag("is_res"):
         cfg.x.graviton_masspoints = cfg.x.radion_masspoints = (
             250, 260, 270, 280, 300, 320, 350, 400, 450, 500,
             550, 600, 650, 700, 750, 800, 850, 900, 1000,
@@ -504,9 +504,12 @@ def add_config(
     if cfg.has_tag("is_dl") and cfg.has_tag("is_nonresonant"):
         from hbw.config.dl import configure_dl
         configure_dl(cfg)
-    if cfg.has_tag("is_resonant"):
-        # from hbw.config.resonant import configure_resonant
-        configure_resonant(cfg)
+    if cfg.has_tag("is_sl") and cfg.has_tag("is_res"):
+        from hbw.config.sl_res import configure_sl_res
+        configure_sl_res(cfg)
+#    if cfg.has_tag("is_resonant"):
+#       # from hbw.config.resonant import configure_resonant
+#        configure_resonant(cfg)
 
     return cfg
 

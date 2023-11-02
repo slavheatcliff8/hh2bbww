@@ -54,7 +54,7 @@ def add_hbw_processes(config: od.Config, campaign: od.Campaign):
         config.add_process(procs.n.qqHH_CV_0p5_C2V_1_kl_1_dl_hbbhww)
         config.add_process(procs.n.qqHH_CV_1p5_C2V_1_kl_1_dl_hbbhww)
 
-    if config.has_tag("is_sl") and config.has_tag("is_resonant"):
+    if config.has_tag("is_sl") and config.has_tag("is_res"):
         for mass in config.x.graviton_masspoints:
             config.add_process(procs.n(f"graviton_hh_ggf_bbww_m{mass}"))
         for mass in config.x.radion_masspoints:

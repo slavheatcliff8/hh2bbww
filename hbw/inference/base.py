@@ -73,8 +73,8 @@ class HBWInferenceModelBase(InferenceModel):
 
                 cat_kwargs = {
                     "config_category": f"{lep}__ml_{proc}",
-                    # "config_variable": f"mlscore.{proc}_rebin",
-                    "config_variable": f"mlscore.{proc}_manybins",
+                     "config_variable": f"mlscore.{proc}_rebin",
+                    #"config_variable": f"mlscore.{proc}_manybins",
                     "mc_stats": self.mc_stats,
                 }
                 if self.skip_data:
@@ -113,7 +113,7 @@ class HBWInferenceModelBase(InferenceModel):
             self.add_process(
                 const.inference_procnames.get(proc, proc),
                 config_process=proc,
-                is_signal=("HH_" in proc),
+                is_signal=("graviton_" in proc),
                 config_mc_datasets=datasets,
             )
 
@@ -155,51 +155,51 @@ class HBWInferenceModelBase(InferenceModel):
         # TODO: some scale/pdf uncertainties should be rounded to 3 digits, others to 4 digits
         # NOTE: it might be easier to just take the recommended uncertainty values from HH conventions at
         #       https://gitlab.cern.ch/hh/naming-conventions instead of taking the values from CMSDB
-        for k, procs in const.processes_per_QCDScale.items():
-            syst_name = f"QCDScale_{k}"
-            if syst_name not in self.systematics:
-                continue
+        # for k, procs in const.processes_per_QCDScale.items():
+        #     syst_name = f"QCDScale_{k}"
+        #     if syst_name not in self.systematics:
+        #         continue
 
-            for proc in procs:
-                if proc not in self.processes:
-                    continue
-                process_inst = self.config_inst.get_process(proc)
-                if "scale" not in process_inst.xsecs[ecm]:
-                    continue
-                self.add_parameter(
-                    syst_name,
-                    process=const.inference_procnames.get(proc, proc),
-                    type=ParameterType.rate_gauss,
-                    effect=tuple(map(
-                        lambda f: round(f, 3),
-                        process_inst.xsecs[ecm].get(names=("scale"), direction=("down", "up"), factor=True),
-                    )),
-                )
-            self.add_parameter_to_group(syst_name, "theory")
+        #     for proc in procs:
+        #         if proc not in self.processes:
+        #             continue
+        #         process_inst = self.config_inst.get_process(proc)
+        #         if "scale" not in process_inst.xsecs[ecm]:
+        #             continue
+        #         self.add_parameter(
+        #             syst_name,
+        #             process=const.inference_procnames.get(proc, proc),
+        #             type=ParameterType.rate_gauss,
+        #             effect=tuple(map(
+        #                 lambda f: round(f, 3),
+        #                 process_inst.xsecs[ecm].get(names=("scale"), direction=("down", "up"), factor=True),
+        #             )),
+        #         )
+        #     self.add_parameter_to_group(syst_name, "theory")
 
         # add PDF rate uncertainties to inference model
-        for k, procs in const.processes_per_pdf_rate.items():
-            syst_name = f"pdf_{k}"
-            if syst_name not in self.systematics:
-                continue
+        # for k, procs in const.processes_per_pdf_rate.items():
+        #     syst_name = f"pdf_{k}"
+        #     if syst_name not in self.systematics:
+        #         continue
 
-            for proc in procs:
-                if proc not in self.processes:
-                    continue
-                process_inst = self.config_inst.get_process(proc)
-                if "pdf" not in process_inst.xsecs[ecm]:
-                    continue
+        #     for proc in procs:
+        #         if proc not in self.processes:
+        #             continue
+        #         process_inst = self.config_inst.get_process(proc)
+        #         if "pdf" not in process_inst.xsecs[ecm]:
+        #             continue
 
-                self.add_parameter(
-                    f"pdf_{k}",
-                    process=const.inference_procnames.get(proc, proc),
-                    type=ParameterType.rate_gauss,
-                    effect=tuple(map(
-                        lambda f: round(f, 3),
-                        process_inst.xsecs[ecm].get(names=("pdf"), direction=("down", "up"), factor=True),
-                    )),
-                )
-            self.add_parameter_to_group(syst_name, "theory")
+        #         self.add_parameter(
+        #             f"pdf_{k}",
+        #             process=const.inference_procnames.get(proc, proc),
+        #             type=ParameterType.rate_gauss,
+        #             effect=tuple(map(
+        #                 lambda f: round(f, 3),
+        #                 process_inst.xsecs[ecm].get(names=("pdf"), direction=("down", "up"), factor=True),
+        #             )),
+        #         )
+        #    self.add_parameter_to_group(syst_name, "theory")
 
     def add_shape_parameters(self: InferenceModel):
         """

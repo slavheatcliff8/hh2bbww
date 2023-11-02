@@ -7,7 +7,7 @@ from columnflow.tasks.framework.base import RESOLVE_DEFAULT
 
 
 def default_selector(cls, container, task_params):
-    if container.has_tag("is_sl"):
+    if container.has_tag("is_sl" or "is_res"):
         selector = "sl"
     elif container.has_tag("is_dl"):
         selector = "dl"
@@ -43,7 +43,7 @@ def default_ml_model(cls, container, task_params):
 
 
 def ml_inputs_producer(cls, container, task_params):
-    if container.has_tag("is_sl"):
+    if container.has_tag("is_sl" or "is_res"):
         ml_inputs = "ml_inputs"
     elif container.has_tag("is_dl"):
         ml_inputs = "dl_ml_inputs"
